@@ -1,0 +1,25 @@
+name:                toyrobot-mtl
+version:             0.1.0.0
+synopsis:            Simple project template from stack
+description:         Please see README.md
+homepage:            http://github.com/dzotokan/toyrobot-mtl#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Daniel S
+maintainer:          standeo@gmail.com
+copyright:           2016 Daniel Stankevich
+category:            General
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable toyrobot-mtl
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  default-extensions:  RankNTypes
+                     , KindSignatures
+                     , FlexibleContexts
+                     , ConstraintKinds
+  build-depends:       base >= 4.7 && < 5
+                     , mtl
+                     , containers
