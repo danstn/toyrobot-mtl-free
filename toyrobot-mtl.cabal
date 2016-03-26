@@ -12,6 +12,10 @@ category:            General
 build-type:          Simple
 cabal-version:       >=1.10
 
+source-repository head
+  type:     git
+  location: http://github.com/dzotokan/toyrobot-mtl
+
 executable toyrobot-mtl
   hs-source-dirs:      src
   main-is:             Main.hs
@@ -20,6 +24,10 @@ executable toyrobot-mtl
                      , KindSignatures
                      , FlexibleContexts
                      , ConstraintKinds
+                     , DeriveFunctor
+                     , TypeFamilies
   build-depends:       base >= 4.7 && < 5
                      , mtl
                      , containers
+                     , free
+
