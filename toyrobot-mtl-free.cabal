@@ -1,8 +1,8 @@
-name:                toyrobot-mtl
+name:                toyrobot-mtl-free
 version:             0.1.0.0
 synopsis:            Simple project template from stack
 description:         Please see README.md
-homepage:            http://github.com/dzotokan/toyrobot-mtl#readme
+homepage:            http://github.com/dzotokan/toyrobot-mtl-free#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Daniel S
@@ -14,9 +14,9 @@ cabal-version:       >=1.10
 
 source-repository head
   type:     git
-  location: http://github.com/dzotokan/toyrobot-mtl
+  location: http://github.com/dzotokan/toyrobot-mtl-free
 
-executable toyrobot-mtl
+executable toyrobot-mtl-free
   hs-source-dirs:      src
   main-is:             Main.hs
   default-language:    Haskell2010
