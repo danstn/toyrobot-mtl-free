@@ -30,4 +30,5 @@ executable toyrobot-mtl-free
                      , mtl
                      , containers
                      , free
+                     , linear
 
