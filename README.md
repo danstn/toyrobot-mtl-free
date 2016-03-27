@@ -10,6 +10,9 @@ Robot's DSL is wrapped in a Free Monad.
 |---|---|---|---|
 |Place|(Integer, Integer)|`place (x,y)`|Place a robot at (x,y)|
 |Report|-|`report`|Report current state (position atm)|
+|Move|-|n/a|Move the robot in the current direction|
+|TurnLeft|-|`turnLeft`|Turn left|
+|TurnRight|-|`turnRight`|Turn right|
 |Done|-|`done`|Terminate evaluation|
 
 
@@ -50,6 +53,8 @@ done
 report >> done
 place (1,1) >> report >> place (2,6) >> done >> report
 report >> place (20, 5) >> report >> done
+turnRight >> turnLeft >> replicateM_ 2 turnRight
+replicateM_ 5 turnLeft
 ```
 
 #### Monad Stack Example (with Super Powers!)

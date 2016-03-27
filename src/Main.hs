@@ -1,9 +1,7 @@
 module Main where
 
-import           Data.Maybe
 import qualified Data.Map as Map
 import           Linear.V2 (V2(..))
-import           Control.Monad.Identity
 import           Control.Monad.Except
 import           Control.Monad.Reader
 import           Control.Monad.Writer
@@ -12,15 +10,23 @@ import           Control.Monad.Free
 import           Control.Lens
 
 type Name = String
-type Position = V2 Integer
 type Env = Map.Map String String
 
--- | Robot data structure
-data Robot = Robot { _position :: V2 Integer
+data Direction = North | East | South | West deriving (Show, Bounded, Enum)
+
+succDirection :: Direction -> Direction
+succDirection West = minBound
+succDirection d = succ d
+
+predDirection :: Direction -> Direction
+predDirection North = maxBound
+predDirection d = pred d
+
+data Robot = Robot { _location :: V2 Integer
+                   , _direction :: Direction
                    , _name :: String
                    } deriving (Show)
 
--- | Worlds data structure
 data World = World { _robot :: Robot
                    } deriving (Show)
 
@@ -30,19 +36,31 @@ makeLenses ''Robot
 -- | Robot DSL
 data RobotDSL next = Place (Integer, Integer) next
                      | Report next
+                     | Move next
+                     | TurnLeft next
+                     | TurnRight next
                      | Done
                      deriving (Functor, Show)
 
 
--- | Robot Program definition and front-end
+-- | Robot API front-end
 --------------------------------------------------------------------------------
 type RobotProgram = Free RobotDSL
 
 place :: (Integer, Integer) -> RobotProgram ()
 place p = liftF $ Place p ()
 
+move :: RobotProgram ()
+move = liftF $ Move ()
+
 report :: RobotProgram ()
 report = liftF $ Report ()
+
+turnLeft :: RobotProgram ()
+turnLeft = liftF $ TurnLeft ()
+
+turnRight :: RobotProgram ()
+turnRight = liftF $ TurnRight ()
 
 done :: RobotProgram ()
 done = liftF Done
@@ -69,8 +87,11 @@ runEval env st ev = runStateT (runWriterT (runExceptT (runReaderT ev env))) st
 -- | Basic interpreter running in a beefy stack `m`
 --------------------------------------------------------------------------------
 eval :: forall (m :: * -> *). EvalStack World m => RobotProgram () -> m ()
-eval (Free (Report next)) = (liftIO . print =<< get) >> eval next
-eval (Free (Place (x,y) next)) = (robot.position.= V2 x y) >> eval next
+eval (Free (Report next))       =  (liftIO . print =<< get) >> eval next
+eval (Free (Place (x,y) next))  =  (robot.location.= V2 x y) >> eval next
+eval (Free (Move next))         =  throwError "Unimplemented action" >> eval next
+eval (Free (TurnLeft next))     =  (robot.direction %= predDirection) >> eval next
+eval (Free (TurnRight next))    =  (robot.direction %= succDirection) >> eval next
 eval (Free Done) = return ()
 eval (Pure r) = return r
 --------------------------------------------------------------------------------
@@ -84,7 +105,8 @@ defaultEnv = Map.empty
 initialState :: World
 initialState = World {
   _robot = Robot {
-    _position = V2 0 0,
+    _location = V2 0 0,
+    _direction = North,
     _name = "Wall-e"
   }
 }
