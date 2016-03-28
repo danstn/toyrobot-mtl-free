@@ -22,6 +22,7 @@ library
                      , ToyRobot.Types
                      , ToyRobot.Actions
                      , ToyRobot.Interpreters
+                     , ToyRobot.Controller
   build-depends:       base >= 4.7 && < 5
                      , containers
                      , mtl
