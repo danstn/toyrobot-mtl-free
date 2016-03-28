@@ -1,4 +1,4 @@
-name:                toyrobot-mtl-free
+name:                toyrobot
 version:             0.1.0.0
 synopsis:            Simple project template from stack
 description:         Please see README.md
@@ -16,11 +16,20 @@ source-repository head
   type:     git
   location: http://github.com/dzotokan/toyrobot-mtl-free
 
-executable toyrobot-mtl-free
-  hs-source-dirs:      src
-  main-is:             Main.hs
+library
+  hs-source-dirs:      src/lib
+  exposed-modules:     ToyRobot.Models
+                     , ToyRobot.Types
+                     , ToyRobot.Actions
+                     , ToyRobot.Interpreters
+  build-depends:       base >= 4.7 && < 5
+                     , containers
+                     , mtl
+                     , lens
+                     , free
+                     , linear
   default-language:    Haskell2010
-  ghc-options:        -Wall
+  ghc-options:         -Wall -W
   default-extensions:  RankNTypes
                      , KindSignatures
                      , FlexibleContexts
@@ -28,10 +37,12 @@ executable toyrobot-mtl-free
                      , DeriveFunctor
                      , TypeFamilies
                      , TemplateHaskell
+
+executable toyrobot
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  ghc-options:        -Wall
   build-depends:       base >= 4.7 && < 5
-                     , mtl
-                     , containers
-                     , free
-                     , linear
-                     , lens
+                     , toyrobot
 
