@@ -1,5 +1,6 @@
 module ToyRobot.Actions where
 
+import           Control.Monad (forever)
 import           Control.Monad.Free
 
 -- | Robot DSL
@@ -33,4 +34,5 @@ turnRight = liftF $ TurnRight ()
 
 done :: RobotProgram ()
 done = liftF Done
+
 
