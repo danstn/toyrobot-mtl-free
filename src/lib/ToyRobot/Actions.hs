@@ -9,8 +9,9 @@ data RobotDSL next = Place (Integer, Integer) next
                      | Move next
                      | TurnLeft next
                      | TurnRight next
+                     | Steer (String -> next)
                      | Done
-                     deriving (Functor, Show)
+                     deriving Functor
 
 type RobotProgram = Free RobotDSL
 
@@ -31,6 +32,10 @@ turnLeft = liftF $ TurnLeft ()
 turnRight :: RobotProgram ()
 turnRight = liftF $ TurnRight ()
 
+steer :: RobotProgram String
+steer = liftF $ Steer id
+
 done :: RobotProgram ()
 done = liftF Done
+
 

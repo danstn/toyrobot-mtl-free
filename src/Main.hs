@@ -1,15 +1,16 @@
 module Main where
 
-import           Control.Monad
-
 import           ToyRobot.Types
 import           ToyRobot.Models
 import           ToyRobot.Actions
 import           ToyRobot.Interpreters
+import           ToyRobot.CLI (repl)
 
-execSandbox :: RobotProgram () -> IO (EvalResult World ())
-execSandbox = (runEval defaultEnv defaultWorld) . eval
+play :: RobotProgram () -> IO (EvalResult World ())
+play = (runEval defaultEnv defaultWorld) . sandbox
 
 main :: IO ()
 main = do
-  putStrLn "Bazinga"
+  putStrLn "--- Starting Robot REPL..."
+  _ <- play repl
+  return ()

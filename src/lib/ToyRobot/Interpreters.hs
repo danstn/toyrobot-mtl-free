@@ -1,8 +1,5 @@
-module ToyRobot.Interpreters (
-  eval
-) where
+module ToyRobot.Interpreters where
 
-import           Linear.V2
 import           Control.Monad.State
 import           Control.Lens
 import           Control.Monad.Free
@@ -14,12 +11,27 @@ import           ToyRobot.Controller
 
 -- | Basic interpreter running in a beefy stack `m`
 --------------------------------------------------------------------------------
-eval :: forall (m :: * -> *). EvalStack World m => RobotProgram () -> m ()
-eval (Free (Report next))    = (liftIO . print =<< get) >> eval next
-eval (Free (Place p next))   = robot.location .= _place p >> eval next
-eval (Free (Move next))      = ((robot.location %=) . _move =<< use (robot.direction)) >> eval next
-eval (Free (TurnLeft next))  = robot.direction %= _turnLeft >> eval next
-eval (Free (TurnRight next)) = robot.direction %= _turnRight >> eval next
-eval (Free Done) = return ()
-eval (Pure r) = return r
+sandbox :: forall (m :: * -> *). EvalStack World m => RobotProgram () -> m ()
+sandbox (Pure r) = return r
+sandbox (Free x) = case x of
+  Report next    -> (liftIO . print =<< get) >> sandbox next
+  Place p next   -> robot.location .= _place p >> sandbox next
+  Move next      -> ((robot.location %=) . _move =<< use (robot.direction)) >> sandbox next
+  TurnLeft next  -> robot.direction %= _turnLeft >> sandbox next
+  TurnRight next -> robot.direction %= _turnRight >> sandbox next
+  Steer f        -> (liftIO $ putStr "robot#repl>") >> liftIO getLine >>= sandbox . f
+  Done           -> return ()
+
+-- | State interprete
+--------------------------------------------------------------------------------
+stateInterp :: MonadState World m => RobotProgram () -> m ()
+stateInterp (Pure r) = return r
+stateInterp (Free x) = case x of
+  Report next    -> stateInterp next
+  Place p next   -> robot.location .= _place p >> stateInterp next
+  Move next      -> ((robot.location %=) . _move =<< use (robot.direction)) >> stateInterp next
+  TurnLeft next  -> robot.direction %= _turnLeft >> stateInterp next
+  TurnRight next -> robot.direction %= _turnRight >> stateInterp next
+  Steer _        -> return ()
+  Done           -> return ()
 

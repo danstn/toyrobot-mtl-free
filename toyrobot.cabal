@@ -23,7 +23,9 @@ library
                      , ToyRobot.Actions
                      , ToyRobot.Interpreters
                      , ToyRobot.Controller
+                     , ToyRobot.CLI
   build-depends:       base >= 4.7 && < 5
+                     , text
                      , containers
                      , mtl
                      , lens
@@ -45,5 +47,6 @@ executable toyrobot
   default-language:    Haskell2010
   ghc-options:        -Wall
   build-depends:       base >= 4.7 && < 5
+                     , text
                      , toyrobot
 
