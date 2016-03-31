@@ -17,20 +17,19 @@ data CLI = PLACE Integer Integer
                     | EXIT
                     deriving (Read, Show)
 
-cliExec :: CLI -> RobotProgram ()
-cliExec (PLACE x y) = place (x, y)
-cliExec REPORT      = report
-cliExec MOVE        = move
-cliExec LEFT        = turnLeft
-cliExec RIGHT       = turnRight
-cliExec EXIT        = done
+{-cliExec :: CLI -> Program ()-}
+{-cliExec (PLACE x y) = place (x, y)-}
+{-cliExec REPORT      = report-}
+{-cliExec MOVE        = move-}
+{-cliExec LEFT        = turnLeft-}
+{-cliExec RIGHT       = turnRight-}
+{-cliExec EXIT        = done-}
 
-repl :: RobotProgram ()
-repl = forever $ do
-  line <- steer
-  let cmd = (toUpper . strip . pack) line
-  maybe
-    repl
-    cliExec (readMaybe $ unpack cmd :: Maybe CLI)
-  repl
+repl = undefined
+{-repl :: Program ()-}
+{-repl = forever $ do-}
+  {-line <- steer-}
+  {-let cmd = (toUpper . strip . pack) line-}
+  {-maybe badCommand cliExec (readMaybe $ unpack cmd :: Maybe CLI)-}
+  {-repl-}
 
